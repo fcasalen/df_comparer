@@ -1,0 +1,11 @@
+*.env
+*.zip
+__pycache__
+*.csv
+*cookies.pkl
+*egg-info*
+*dist*
+*.parquet
+teste.ipynb
+*.gitkeep
+*build*
