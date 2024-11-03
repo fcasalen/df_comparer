@@ -2,17 +2,17 @@ from .df_comparer import DfComparer
 from pandas import DataFrame
 from mocks_handler import MocksHandler
 from pytest import raises
-from numpy import NaN, NAN, nan
+from numpy import NAN
 
 mh = MocksHandler('df_comparer')
 
 def test_compare():
     expected_df = DataFrame({
-        'item1': ['1', '2', '3', '1', '2', '3', '4', '4'],
-        'variable': ['valor'] * 3 + ['coluna'] * 3 + ['valor', 'coluna'],
-        'new_df': [5, 6, 7, 'hoje', 'ontem', 'amanha', NAN, NAN],
-        'old_df': [5,4, NAN, 'ontem', 'ontem', NAN, 7, 'amanha'],
-        'changes': ['kept', 'changed', 'added', 'changed', 'kept', 'added', 'excluded', 'excluded']
+        'item1': ['1', '1', '2', '2', '3', '3', '4', '4'],
+        'variable': ['coluna', 'valor'] * 4 ,
+        'new_df': ['hoje', 5, 'ontem', 6, 'amanha', 7, NAN, NAN],
+        'old_df': ['ontem', 5,'ontem', 4, NAN, NAN, 'amanha', 7],
+        'changes': ['changed', 'kept', 'kept', 'changed', 'added', 'added', 'excluded', 'excluded']
     })
     expected_df['new_df'] = expected_df['new_df'].astype(str)
     expected_df['old_df'] = expected_df['old_df'].astype(str)
@@ -46,9 +46,9 @@ def test_old_df_none():
         id_list = ['item1']
     )
     expected_df = DataFrame({
-        'item1': ['1', '2', '3', '1', '2', '3'],
-        'variable': ['valor'] * 3 + ['coluna'] * 3,
-        'new_df': [5, 6, 7, 'hoje', 'ontem', 'amanha'],
+        'item1': ['1', '1', '2', '2', '3', '3'],
+        'variable': ['coluna', 'valor'] * 3,
+        'new_df': ['hoje', 5, 'ontem', 6, 'amanha', 7],
         'old_df': [NAN] * 6,
         'changes': ['added'] * 6
     })
@@ -83,10 +83,10 @@ def test_new_column():
     )
     expected_df = DataFrame({
         'item1':['oxe', 'oxe', 'oxe', 'oxe'],
-        'variable': ['val', 'val', 'ha', 'ha'],
-        'new_df': ['1', '2', '3', '2'],
-        'old_df': ['2.0', '2.0', 'nan', 'nan'],
-        'changes': ['changed', 'kept', 'added', 'added']
+        'variable': ['ha', 'ha', 'val', 'val'],
+        'new_df': ['3', '2', '1', '2'],
+        'old_df': ['nan', 'nan', '2.0', '2.0'],
+        'changes': ['added', 'added', 'changed', 'kept']
     })
     assert df.equals(expected_df)
     df = DfComparer.from_df(
@@ -96,10 +96,10 @@ def test_new_column():
     )
     expected_df = DataFrame({
         'item1':['oxe', 'oxe', 'oxe', 'oxe'],
-        'variable': ['val', 'val', 'ha', 'ha'],
-        'new_df': ['2.0', '2.0', 'nan', 'nan'],
-        'old_df': ['1', '2', '3', '2'],
-        'changes': ['changed', 'kept', 'excluded', 'excluded']
+        'variable': ['ha', 'ha', 'val', 'val'],
+        'new_df': ['nan', 'nan', '2.0', '2.0'],
+        'old_df': ['3', '2', '1', '2'],
+        'changes': ['excluded', 'excluded', 'changed', 'kept']
     })
     assert df.equals(expected_df)
     
