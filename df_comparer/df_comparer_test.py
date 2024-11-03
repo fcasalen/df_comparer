@@ -2,7 +2,7 @@ from .df_comparer import DfComparer
 from pandas import DataFrame
 from mocks_handler import MocksHandler
 from pytest import raises
-from numpy import NAN
+from numpy import nan
 
 mh = MocksHandler('df_comparer')
 
@@ -10,8 +10,8 @@ def test_compare():
     expected_df = DataFrame({
         'item1': ['1', '1', '2', '2', '3', '3', '4', '4'],
         'variable': ['coluna', 'valor'] * 4 ,
-        'new_df': ['hoje', 5, 'ontem', 6, 'amanha', 7, NAN, NAN],
-        'old_df': ['ontem', 5,'ontem', 4, NAN, NAN, 'amanha', 7],
+        'new_df': ['hoje', 5, 'ontem', 6, 'amanha', 7, nan, nan],
+        'old_df': ['ontem', 5,'ontem', 4, nan, nan, 'amanha', 7],
         'changes': ['changed', 'kept', 'kept', 'changed', 'added', 'added', 'excluded', 'excluded']
     })
     expected_df['new_df'] = expected_df['new_df'].astype(str)
@@ -49,7 +49,7 @@ def test_old_df_none():
         'item1': ['1', '1', '2', '2', '3', '3'],
         'variable': ['coluna', 'valor'] * 3,
         'new_df': ['hoje', 5, 'ontem', 6, 'amanha', 7],
-        'old_df': [NAN] * 6,
+        'old_df': [nan] * 6,
         'changes': ['added'] * 6
     })
     expected_df = expected_df.astype(str)
@@ -63,8 +63,8 @@ def test_old_df_none():
 
 def test_both_null():
     df = DfComparer.from_df(
-        new_df = DataFrame({'item1': ['oxe'], 'val': [NAN]}),
-        old_df = DataFrame({'item1': ['oxe'], 'val': [NAN]}),
+        new_df = DataFrame({'item1': ['oxe'], 'val': [nan]}),
+        old_df = DataFrame({'item1': ['oxe'], 'val': [nan]}),
         id_list = ['item1']
     )
     assert df.equals(DataFrame({

@@ -1,7 +1,7 @@
 from pandas import DataFrame, merge
 from .df_reader import df_reader
 from .params_validators import DfComparerParametersDf, DfComparerParametersPaths
-from numpy import NAN
+from numpy import nan
 import random
 import string
 from warnings import warn
@@ -39,7 +39,7 @@ class DfComparer:
         df_final.loc[df_final.query(f'{value_name}_x.isnull() and {value_name}_y.isnull() == False').index, 'changes'] = 'excluded'
         df_final.loc[df_final.query(f'{value_name}_y.isnull() and {value_name}_x.isnull() == False').index, 'changes'] = 'added'
         df_final.loc[df_final.query(f'{value_name}_x.isnull() == False and {value_name}_y.isnull() == False and {value_name}_x != {value_name}_y').index, 'changes'] = 'changed'
-        df_final = df_final.fillna(NAN)
+        df_final = df_final.fillna(nan)
         df_final = df_final.astype(str)
         if not rename_columns_new_old:
             df_final.rename(
