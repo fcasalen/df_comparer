@@ -60,7 +60,8 @@ class DfComparer:
             inplace=True
         )
         if drop_not_changed:
-            df_final = df_final.query('changes!="kept"').reset_index(drop=True)
+            df_final = df_final.query('changes!="kept"')
+        df_final = df_final.sort_values(by=id_list)
         return df_final
     
     @staticmethod

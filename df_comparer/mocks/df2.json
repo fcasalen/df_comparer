@@ -1,5 +1,5 @@
 {
-    "item1": ["1", "2", "4"],
-    "valor": [5, 4, 7],
-    "coluna": ["ontem", "ontem", "amanha"]
+    "item1": ["1", "4", "2"],
+    "valor": [5, 7, 4],
+    "coluna": ["ontem", "amanha", "ontem"]
 }
