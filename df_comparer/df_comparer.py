@@ -12,7 +12,7 @@ def generate_random_string(length):
 
 class DfComparer:
     @staticmethod
-    def from_df(new_df:pd.DataFrame, id_list:list[str], old_df:pd.DataFrame = None, rename_columns_new_old:list[str] = None, drop_not_changed:bool = False) -> pd.DataFrame:
+    def from_df(new_df:pd.DataFrame, id_list:list[str], old_df:pd.DataFrame = None, rename_columns_new_old:list[str] = ['new_df', 'old_df'], drop_not_changed:bool = False, na_values:str = 'NA') -> pd.DataFrame:
         if not isinstance(old_df, pd.DataFrame):
             if not old_df:
                 old_df = pd.DataFrame(columns=new_df.columns)
@@ -39,16 +39,6 @@ class DfComparer:
         df_final.loc[df_final.query(f'{value_name}_x.isnull() and {value_name}_y.isnull() == False').index, 'changes'] = 'excluded'
         df_final.loc[df_final.query(f'{value_name}_y.isnull() and {value_name}_x.isnull() == False').index, 'changes'] = 'added'
         df_final.loc[df_final.query(f'{value_name}_x.isnull() == False and {value_name}_y.isnull() == False and {value_name}_x != {value_name}_y').index, 'changes'] = 'changed'
-        if not rename_columns_new_old:
-            df_final.rename(
-                columns={
-                    f'{value_name}_x': 'new_df',
-                    f'{value_name}_y': 'old_df',
-                    var_name: 'variable'
-                },
-                inplace=True
-            )
-            return df_final
         df_final.rename(
             columns={
                 f'{value_name}_x': rename_columns_new_old[0],
@@ -59,12 +49,13 @@ class DfComparer:
         )
         if drop_not_changed:
             df_final = df_final.query('changes!="kept"')
+        df_final = df_final.fillna(na_values)
+        df_final = df_final.astype(str)
         df_final = df_final.sort_values(by=id_list + ['variable'])
-        df_final = df_final.fillna(np.nan)
         return df_final
     
     @staticmethod
-    def from_paths(new_df_path:str, id_list:list[str], old_df_path:str = '', rename_columns_to_path:bool = True, drop_not_changed:bool = False) -> pd.DataFrame:
+    def from_paths(new_df_path:str, id_list:list[str], old_df_path:str = '', rename_columns_to_path:bool = True, drop_not_changed:bool = False, na_values:str = 'NA') -> pd.DataFrame:
         DfComparerParametersPaths(id_list=id_list, new_df_path=new_df_path, old_df_path=old_df_path)
         new_df = df_reader(new_df_path)
         old_df = None
@@ -72,7 +63,7 @@ class DfComparer:
         if old_df_path != '':
             old_df = df_reader(old_df_path)
             old_path_rename_col = old_df_path
-        rename_columns = None
+        rename_columns = ['new_df', 'old_df']
         if rename_columns_to_path:
             rename_columns = [new_df_path, old_path_rename_col]
         return DfComparer.from_df(
@@ -80,5 +71,6 @@ class DfComparer:
             old_df=old_df,
             id_list=id_list,
             rename_columns_new_old=rename_columns,
-            drop_not_changed=drop_not_changed
+            drop_not_changed=drop_not_changed,
+            na_values=na_values
         )
