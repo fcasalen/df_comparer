@@ -52,6 +52,7 @@ class DfComparer:
         df_final = df_final.fillna(na_values)
         df_final = df_final.astype(str)
         df_final = df_final.sort_values(by=id_list + ['variable'])
+        df_final.reset_index(drop=True, inplace=True)
         return df_final
     
     @staticmethod
