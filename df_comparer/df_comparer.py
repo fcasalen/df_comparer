@@ -20,9 +20,9 @@ class DfComparer:
         erros = []
         for col in id_list:
             if new_df[col].isnull().any():
-                erros.append(f'new_df tem valores nulos na coluna {col}. As linhas com valores nulos nessa coluna serão removidas')
+                erros.append(f'new_df has null values in column {col}, which is an id column. Rows with null values in that column will be removed')
             if old_df[col].isnull().any():
-                erros.append(f'old_df tem valores nulos na coluna {col}. As linhas com valores nulos nessa coluna serão removidas')
+                erros.append(f'old_df has null values in column {col}, which is an id column. Rows with null values in that column will be removed')
         if erros:
             warn("\n".join(erros))
         new_df = new_df.dropna(subset=id_list)
