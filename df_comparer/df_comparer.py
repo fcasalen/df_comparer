@@ -20,7 +20,7 @@ class DfComparer:
         new_df = new_df.convert_dtypes()
         old_df = old_df.convert_dtypes()
         erros = []
-        id_list_for_query_null = [f'{f}.isnull()' for f in id_list]
+        id_list_for_query_null = [f'`{f}`.isnull()' for f in id_list]
         index_new_df_null = new_df.query(f'{" and ".join(id_list_for_query_null)}').index
         if len(index_new_df_null):
             erros.append(f'new_df has {len(index_new_df_null)} null values for all id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')

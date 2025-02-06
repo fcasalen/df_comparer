@@ -37,23 +37,23 @@ def test_compare():
     
 def test_id_list_with_na():
     new_df = pd.DataFrame({
-        'id_1': [pd.NA, 1],
-        'id_2': [pd.NA] * 2,
+        'id 1': [pd.NA, 1],
+        'id 2': [pd.NA] * 2,
         'col3': [1, 2]
     })
     old_df = pd.DataFrame({
-        'id_1': [pd.NA, 1],
-        'id_2': [pd.NA] * 2,
+        'id 1': [pd.NA, 1],
+        'id 2': [pd.NA] * 2,
         'col3': [1, 3]
     })
     df = DfComparer.from_df(
         new_df=new_df,
         old_df=old_df,
-        id_list=['id_1', 'id_2']
+        id_list=['id 1', 'id 2']
     )
     expected_df = pd.DataFrame({
-        'id_1': [1],
-        'id_2': [pd.NA],
+        'id 1': [1],
+        'id 2': [pd.NA],
         'variable': ['col3'],
         'new_df': [2],
         'old_df': [3],
