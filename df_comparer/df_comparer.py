@@ -12,7 +12,7 @@ def generate_random_string(length):
 
 class DfComparer:
     @staticmethod
-    def from_df(new_df:pd.DataFrame, id_list:list[str], old_df:pd.DataFrame = None, rename_columns_new_old:list[str] = ['new_df', 'old_df'], drop_not_changed:bool = False, na_values:str = 'NA') -> pd.DataFrame:
+    def from_df(new_df:pd.DataFrame, id_list:list[str], old_df:pd.DataFrame = None, rename_columns_new_old:list[str] = ['new_df', 'old_df'], drop_not_changed:bool = False, na_values:str = pd.NA) -> pd.DataFrame:
         if not isinstance(old_df, pd.DataFrame):
             if not old_df:
                 old_df = pd.DataFrame(columns=new_df.columns)
@@ -50,13 +50,14 @@ class DfComparer:
         if drop_not_changed:
             df_final = df_final.query('changes!="kept"')
         df_final = df_final.fillna(na_values)
-        df_final = df_final.astype(str)
         df_final = df_final.sort_values(by=id_list + ['variable'])
         df_final.reset_index(drop=True, inplace=True)
+        df_final[rename_columns_new_old[0]] = [pd.NA if type(v) == float and str(v) == 'nan' else v for v in df_final[rename_columns_new_old[0]]]
+        df_final[rename_columns_new_old[1]] = [pd.NA if type(v) == float and str(v) == 'nan'  else v for v in df_final[rename_columns_new_old[1]]]
         return df_final
     
     @staticmethod
-    def from_paths(new_df_path:str, id_list:list[str], old_df_path:str = '', rename_columns_to_path:bool = True, drop_not_changed:bool = False, na_values:str = 'NA') -> pd.DataFrame:
+    def from_paths(new_df_path:str, id_list:list[str], old_df_path:str = '', rename_columns_to_path:bool = True, drop_not_changed:bool = False, na_values:str = pd.NA) -> pd.DataFrame:
         DfComparerParametersPaths(id_list=id_list, new_df_path=new_df_path, old_df_path=old_df_path)
         new_df = df_reader(new_df_path)
         old_df = None
