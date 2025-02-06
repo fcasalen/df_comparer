@@ -35,6 +35,35 @@ def test_compare():
         right=expected_df
     )
     
+def test_id_list_with_na():
+    new_df = pd.DataFrame({
+        'id_1': [pd.NA, 1],
+        'id_2': [pd.NA] * 2,
+        'col3': [1, 2]
+    })
+    old_df = pd.DataFrame({
+        'id_1': [pd.NA, 1],
+        'id_2': [pd.NA] * 2,
+        'col3': [1, 3]
+    })
+    df = DfComparer.from_df(
+        new_df=new_df,
+        old_df=old_df,
+        id_list=['id_1', 'id_2']
+    )
+    expected_df = pd.DataFrame({
+        'id_1': [1],
+        'id_2': [pd.NA],
+        'variable': ['col3'],
+        'new_df': [2],
+        'old_df': [3],
+        'changes': ['changed']
+    }).convert_dtypes()
+    pd.testing.assert_frame_equal(
+        left=df,
+        right=expected_df
+    )
+
 def test_invalids():
     with raises(ValueError, match='columns in id_list not found in new_df: oi') as exc:
         DfComparer.from_df(

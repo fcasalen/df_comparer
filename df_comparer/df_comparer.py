@@ -17,16 +17,20 @@ class DfComparer:
             if not old_df:
                 old_df = pd.DataFrame(columns=new_df.columns)
         DfComparerParametersDf(id_list=id_list, new_df=new_df, old_df=old_df, rename_columns_new_old=rename_columns_new_old)
+        new_df = new_df.convert_dtypes()
+        old_df = old_df.convert_dtypes()
         erros = []
-        for col in id_list:
-            if new_df[col].isnull().any():
-                erros.append(f'new_df has null values in column {col}, which is an id column. Rows with null values in that column will be removed')
-            if old_df[col].isnull().any():
-                erros.append(f'old_df has null values in column {col}, which is an id column. Rows with null values in that column will be removed')
+        id_list_for_query_null = [f'{f}.isnull()' for f in id_list]
+        index_new_df_null = new_df.query(f'{" and ".join(id_list_for_query_null)}').index
+        if len(index_new_df_null):
+            erros.append(f'new_df has {len(index_new_df_null)} null values for all id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
+            new_df = new_df.dropna(subset=id_list, how='all')
+        index_old_df_null = old_df.query(f'{" and ".join(id_list_for_query_null)}').index
+        if len(index_new_df_null):
+            erros.append(f'old_df has {len(index_old_df_null)} null values for all id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
+            old_df = old_df.dropna(subset=id_list, how='all')
         if erros:
             warn("\n".join(erros))
-        new_df = new_df.dropna(subset=id_list)
-        old_df = old_df.dropna(subset=id_list)
         value_name = generate_random_string(10)
         var_name = generate_random_string(10)
         new_df_melted = new_df.melt(id_vars=id_list, value_name=value_name, var_name=var_name)

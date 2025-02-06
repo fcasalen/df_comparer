@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="df_comparer",
-    version="0.1.2",
+    version="0.1.3",
     license="GNU General Public License",
     author="fcasalen",
     author_email="fcasalen@gmail.com",
