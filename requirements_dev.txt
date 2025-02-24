@@ -1,3 +1,5 @@
+mocks_handler
 pandas
 pydantic
+pytest
 setuptools

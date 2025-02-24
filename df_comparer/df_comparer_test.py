@@ -2,7 +2,6 @@ from .df_comparer import DfComparer
 from mocks_handler import MocksHandler
 from pytest import raises
 import pandas as pd
-import numpy as np
 
 mh = MocksHandler('df_comparer')
 

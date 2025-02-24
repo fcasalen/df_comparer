@@ -4,7 +4,6 @@ import random
 import string
 from warnings import warn
 import pandas as pd
-import numpy as np
 
 def generate_random_string(length):
     letters = string.ascii_letters + "_"
@@ -21,13 +20,13 @@ class DfComparer:
         old_df = old_df.convert_dtypes()
         erros = []
         id_list_for_query_null = [f'`{f}`.isnull()' for f in id_list]
-        index_new_df_null = new_df.query(f'{" and ".join(id_list_for_query_null)}').index
+        index_new_df_null = new_df.query(f'{" or ".join(id_list_for_query_null)}').index
         if len(index_new_df_null):
-            erros.append(f'new_df has {len(index_new_df_null)} null values for all id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
+            erros.append(f'new_df has {len(index_new_df_null)} null values in id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
             new_df = new_df.dropna(subset=id_list, how='all')
-        index_old_df_null = old_df.query(f'{" and ".join(id_list_for_query_null)}').index
+        index_old_df_null = old_df.query(f'{" or ".join(id_list_for_query_null)}').index
         if len(index_new_df_null):
-            erros.append(f'old_df has {len(index_old_df_null)} null values for all id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
+            erros.append(f'old_df has {len(index_old_df_null)} null values in id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
             old_df = old_df.dropna(subset=id_list, how='all')
         if erros:
             warn("\n".join(erros))
