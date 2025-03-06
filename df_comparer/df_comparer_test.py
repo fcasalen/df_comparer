@@ -35,28 +35,28 @@ def test_compare():
     )
     
 def test_id_list_with_na():
-    new_df = pd.DataFrame({
-        'id 1': [pd.NA, 1],
-        'id 2': [pd.NA] * 2,
-        'col3': [1, 2]
+    df1 = pd.DataFrame({
+        'id1': ['first', 'second', pd.NA],
+        'id2': ['first', pd.NA, 'third'],
+        'col1': [1, 2, 3]
     })
-    old_df = pd.DataFrame({
-        'id 1': [pd.NA, 1],
-        'id 2': [pd.NA] * 2,
-        'col3': [1, 3]
+    df2 = pd.DataFrame({
+        'id1': ['first', 'second', 'third'],
+        'id2': ['first', 'second', 'third'],
+        'col1': [4, 5, 6]
     })
     df = DfComparer.from_df(
-        new_df=new_df,
-        old_df=old_df,
-        id_list=['id 1', 'id 2']
+        new_df=df1,
+        old_df=df2,
+        id_list=['id1', 'id2']
     )
     expected_df = pd.DataFrame({
-        'id 1': [1],
-        'id 2': [pd.NA],
-        'variable': ['col3'],
-        'new_df': [2],
-        'old_df': [3],
-        'changes': ['changed']
+        'id1': ['first', 'second', 'third'],
+        'id2': ['first', 'second', 'third'],
+        'variable': ['col1', 'col1', 'col1'],
+        'new_df': [1, pd.NA, pd.NA],
+        'old_df': [4, 5, 6],
+        'changes': ['changed', 'excluded', 'excluded']
     }).convert_dtypes()
     pd.testing.assert_frame_equal(
         left=df,

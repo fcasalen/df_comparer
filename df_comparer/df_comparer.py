@@ -23,11 +23,11 @@ class DfComparer:
         index_new_df_null = new_df.query(f'{" or ".join(id_list_for_query_null)}').index
         if len(index_new_df_null):
             erros.append(f'new_df has {len(index_new_df_null)} null values in id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
-            new_df = new_df.dropna(subset=id_list, how='all')
+            new_df = new_df.dropna(subset=id_list)
         index_old_df_null = old_df.query(f'{" or ".join(id_list_for_query_null)}').index
         if len(index_new_df_null):
             erros.append(f'old_df has {len(index_old_df_null)} null values in id columns ({", ".join(id_list)}). Rows with null values in id columns will be removed')
-            old_df = old_df.dropna(subset=id_list, how='all')
+            old_df = old_df.dropna(subset=id_list)
         if erros:
             warn("\n".join(erros))
         value_name = generate_random_string(10)
