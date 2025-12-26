@@ -1,0 +1,56 @@
+[build-system]
+requires = ["poetry-core>=2.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[project]
+name = "df_comparer"
+description = "library to get the difference between two dataframes in a new dataframe"
+license = "LICENSE"
+readme = "README.md"
+keywords = ["dataframe", "compare", "difference"]
+authors = [
+    { name = "Fernando Casale Neto", email = "fcasalen@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+requires-python = ">=3.11, <4.0"
+dynamic = ["version", "dependencies"]
+
+[tool.poetry]
+packages = [{include = "df_comparer", from = "src"}]
+version = "0.0.0"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+format = "{base}"
+
+[tool.poetry.dependencies]
+pandas = "^2.3.3"
+openpyxl = "^3.1.5"
+pyarrow = "^22.0.0"
+fastparquet = "^2024.11.0"
+xlrd = "^2.0.2"
+pyxlsb = "^1.0.10"
+python-calamine = "^0.6.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+detect = "^2020.12.3"
+pytest-cov = "^7.0.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
+
+[tool.ruff.lint]
+select = ["I", "F", "E", "W", "C", "N"]
+
+[tool.ruff.format]
+docstring-code-format = true

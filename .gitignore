@@ -9,3 +9,4 @@ __pycache__
 teste.ipynb
 *.gitkeep
 *build*
+.vscode
