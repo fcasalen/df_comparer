@@ -1,3 +1,3 @@
-from . import df_comparer
+from .df_comparer import from_df, from_paths
 
-__all__ = ["df_comparer"]
+__all__ = ["from_df", "from_paths"]
