@@ -121,7 +121,8 @@ def from_paths(
     drop_not_changed: bool = False,
 ) -> pd.DataFrame:
     """Compares two dataframes from file paths and returns a dataframe with the
-    differences.
+    differences. Paths should point to files readable by pandas (e.g., .xlsx, .csv,
+    .parquet).
 
     Args:
         new_df_path (str): path to the new dataframe file.

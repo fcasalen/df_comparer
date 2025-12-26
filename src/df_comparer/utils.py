@@ -18,6 +18,8 @@ def df_reader(file_path: str):
         engine = "xlrd"
     elif file_path.suffix.lower() == ".xlsb":
         engine = "pyxlsb"
+    elif file_path.suffix.lower() == ".parquet":
+        return pd.read_parquet(file_path)
     else:
         engine = None  # let pandas decide
     return pd.read_excel(file_path, engine=engine)

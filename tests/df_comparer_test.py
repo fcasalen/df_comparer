@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Callable
 
 import pandas as pd
@@ -216,6 +217,25 @@ class TestFromPath:
     def test_old_df_none_not_renaming_path(self):
         df = df_comparer.from_paths(
             new_df_path="tests/mocks/df1.xlsx",
+            id_list=["item1"],
+            rename_columns_to_path=False,
+        )
+        expected_df = pd.DataFrame(
+            {
+                "item1": [1, 1, 2, 2, 3, 3],
+                "variable": ["coluna", "valor"] * 3,
+                "new_df": ["hoje", 5, "ontem", 6, "amanha", 7],
+                "old_df": [pd.NA] * 6,
+                "changes": ["added"] * 6,
+            }
+        ).convert_dtypes()
+        pd.testing.assert_frame_equal(left=df, right=expected_df)
+
+    def test_old_df_none_not_renaming_path_parquet(self, tmp_path: Path):
+        df = pd.read_excel("tests/mocks/df1.xlsx")
+        df.to_parquet(tmp_path / "df1.parquet")
+        df = df_comparer.from_paths(
+            new_df_path=tmp_path / "df1.parquet",
             id_list=["item1"],
             rename_columns_to_path=False,
         )
