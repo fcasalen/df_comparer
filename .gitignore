@@ -10,3 +10,4 @@ teste.ipynb
 *.gitkeep
 *build*
 .vscode
+.coverage
